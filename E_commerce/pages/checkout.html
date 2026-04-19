@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">ShopEasy</div>
+    </nav>
+
+    <main class="checkout-container">
+        <h1>Checkout</h1>
+        
+        <form id="checkout-form">
+            <input type="text" placeholder="Full Name" required>
+            <input type="email" placeholder="Email" required>
+            <input type="tel" placeholder="Phone" required>
+            <textarea placeholder="Shipping Address" required></textarea>
+            
+            <h3>Payment Method</h3>
+            <select>
+                <option>Cash on Delivery</option>
+                <option>Bank Transfer</option>
+                <option>Mobile Money</option>
+            </select>
+            
+            <button type="submit" class="place-order-btn">
+                Place Order
+            </button>
+        </form>
+    </main>
+
+    <script>
+        document.getElementById('checkout-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Order placed successfully! (Demo only)');
+            localStorage.removeItem('cart');
+            window.location.href = '../index.html';
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>ShopEasy - Your Online Store</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+    <div class="logo">ShopEasy</div>
+    <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="pages/products.html">Shop</a>
+        <a href="pages/cart.html">Cart (<span id="cart-count">0</span>)</a>
+    </div>
+    <div class="auth-links">
+        <span id="user-name" style="color: #2563eb; font-weight: bold;"></span>
+        <a href="pages/login.html" id="login-btn">Login</a>
+        <a href="#" id="logout-btn" style="display:none" onclick="auth.logout(); return false;">Logout</a>
+    </div>
+</nav>
+
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <h1>Summer Collection 2025</h1>
+        <h1>
+        <p>Discover amazing deals</p>
+        <a href="Pages/products.html" class="btn-primary">Shop Now</a>
+    </header>
+
+    <!-- Featured Products (Dynamic) -->
+    <section class="featured">
+        <h2>Trending Now</h2>
+        <div id="product-grid" class="product-grid">
+            <!-- Products injected here via JS -->
+        </div>
+    </section>
+
+    <script src="js/app.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/auth.js"></script>
+
+</body>
+</html>
