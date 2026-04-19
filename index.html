@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FarmFresh - Premium Farm Produce</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <img src="assets/images/hero-bg.jpg" alt="Farm">
+
+ <!-- Navigation -->
+<nav class="navbar">
+    <div class="nav-brand">
+        <div class="logo-badge">🌾</div>
+        <div class="brand-text">
+            <span class="brand-name">FarmFresh</span>
+            <span class="brand-tag">Premium Farm Produce</span>
+        </div>
+    </div>
+    
+    <div class="nav-center">
+        <a href="index.html" class="nav-link active">Home</a>
+        <a href="./pages/products.html" class="nav-link">Shop</a>
+        <a href="./pages/cart.html" class="nav-link cart-link">
+            <span class="cart-icon">🛒</span>
+            <span class="cart-badge" id="cart-count">0</span>
+        </a>
+    </div>
+    
+    <div class="nav-auth">
+        <!-- Guest: Show Login button -->
+        <a href="./pages/login.html" id="login-btn" class="btn-primary-sm">Sign In</a>
+        
+        <!-- Logged in: Show user info + logout -->
+        <div id="user-greeting" style="display: none; align-items: center; gap: 0.5rem;">
+            <span>Hi, <span id="user-name" style="color: #22c55e; font-weight: 600;"></span></span>
+        </div>
+        <button id="logout-btn" style="display: none;" class="btn-ghost" onclick="auth.logout()">Logout</button>
+    </div>
+</nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-bg">
+            <div class="hero-overlay"></div>
+            <div class="hero-content">
+                <div class="badge">🚚 Same Day Delivery</div>
+                <h1>Farm Fresh Vegetables<br>& Fruits Delivered</h1>
+                <p class="hero-subtitle">From our farm to your table in 24 hours. 100% organic, pesticide-free produce.</p>
+                <div class="hero-cta">
+                    <a href="#shop" class="btn-white">Shop Now</a>
+                    <a href="#how" class="btn-outline-white">How It Works</a>
+                </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Bar -->
+    <section class="features-bar">
+        <div class="feature-item">
+            <div class="feature-icon">🌱</div>
+            <div>
+                <strong>100% Organic</strong>
+                <span>No pesticides</span>
+            </div>
+        </div>
+        <div class="feature-item">
+            <div class="feature-icon">⚡</div>
+            <div>
+                <strong>Fast Delivery</strong>
+                <span>Same day in city</span>
+            </div>
+        </div>
+        <div class="feature-item">
+            <div class="feature-icon">💯</div>
+            <div>
+                <strong>Fresh Guarantee</strong>
+                <span>Or money back</span>
+            </div>
+        </div>
+        <div class="feature-item">
+            <div class="feature-icon">🏷️</div>
+            <div>
+                <strong>Best Prices</strong>
+                <span>Farm direct</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories -->
+    <section class="categories" id="shop">
+        <div class="section-header">
+            <span class="section-label">Categories</span>
+            <h2>Browse by Category</h2>
+        </div>
+        <div class="category-pills">
+            <button class="pill active" onclick="filterCategory('all')">
+                <span class="pill-icon">🥬</span>
+                <span>All</span>
+            </button>
+            <button class="pill" onclick="filterCategory('Vegetables')">
+                <span class="pill-icon">🥦</span>
+                <span>Vegetables</span>
+            </button>
+            <button class="pill" onclick="filterCategory('Fruits')">
+                <span class="pill-icon">🍎</span>
+                <span>Fruits</span>
+            </button>
+            <button class="pill" onclick="filterCategory('Tubers')">
+                <span class="pill-icon">🍠</span>
+                <span>Tubers</span>
+            </button>
+            <button class="pill" onclick="filterCategory('Poultry')">
+                <span class="pill-icon">🥚</span>
+                <span>Poultry</span>
+            </button>
+        </div>
+    </section>
+
+    <!-- Products Grid -->
+    <section class="products-section">
+        <div class="section-header">
+            <span class="section-label">Fresh Arrivals</span>
+            <h2>Today's Harvest</h2>
+        </div>
+        <div id="product-grid" class="product-grid">
+            <!-- Products loaded by JS -->
+        </div>
+        <div class="load-more">
+            <button class="btn-outline" onclick="loadMore()">Load More Products</button>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works" id="how">
+        <div class="section-header light">
+            <span class="section-label">Simple Process</span>
+            <h2>How FarmFresh Works</h2>
+        </div>
+        <div class="steps">
+            <div class="step">
+                <div class="step-num">1</div>
+                <div class="step-icon">🛒</div>
+                <h3>Choose Products</h3>
+                <p>Browse our fresh farm produce and add to cart</p>
+            </div>
+            <div class="step-arrow">→</div>
+            <div class="step">
+                <div class="step-num">2</div>
+                <div class="step-icon">📱</div>
+                <h3>Place Order</h3>
+                <p>Checkout securely with your delivery details</p>
+            </div>
+            <div class="step-arrow">→</div>
+            <div class="step">
+                <div class="step-num">3</div>
+                <div class="step-icon">🚚</div>
+                <h3>Fast Delivery</h3>
+                <p>Receive fresh produce at your doorstep</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trust Badges -->
+    <section class="trust-section">
+        <div class="trust-badges">
+            <div class="trust-badge">🏆 Best Quality</div>
+            <div class="trust-badge">🌿 100% Organic</div>
+            <div class="trust-badge">💰 Money Back</div>
+            <div class="trust-badge">🚚 Free Delivery</div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <div class="logo-badge">🌾</div>
+                <h3>FarmFresh</h3>
+                <p>Premium farm produce delivered fresh to your doorstep. Supporting local farmers since 2024.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Shop</h4>
+                <a href="#">Vegetables</a>
+                <a href="#">Fruits</a>
+                <a href="#">Tubers</a>
+                <a href="#">Poultry</a>
+            </div>
+            <div class="footer-links">
+                <h4>Company</h4>
+                <a href="#">About Us</a>
+                <a href="#">Our Farmers</a>
+                <a href="#">Sustainability</a>
+                <a href="#">Contact</a>
+            </div>
+            <div class="footer-links">
+                <h4>Support</h4>
+                <a href="#">Help Center</a>
+                <a href="#">Delivery Info</a>
+                <a href="#">Returns</a>
+                <a href="#">Track Order</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 FarmFresh. All rights reserved.</p>
+            <div class="payment-icons">
+                <span>💳</span>
+                <span>📱</span>
+                <span>🏦</span>
+            </div>
+        </div>
+    </footer>
+
+<!-- Mobile Bottom Nav -->
+<nav class="mobile-nav">
+    <a href="index.html" class="mobile-link active">
+        <span>🏠</span>
+        <span>Home</span>
+    </a>
+    <a href="./pages/products.html" class="mobile-link">
+        <span>🛍️</span>
+        <span>Shop</span>
+    </a>
+    <a href="./pages/cart.html" class="mobile-link">
+        <span>🛒</span>
+        <span>Cart</span>
+    </a>
+    <!-- Account link - changes based on login status -->
+    <a href="./pages/login.html" id="mobile-account-link" class="mobile-link">
+        <span>👤</span>
+        <span>Account</span>
+    </a>
+</nav>
+    <script src="./js/auth.js"></script>
+    <script src="./js/app.js"></script>
+    <script src="./js/cart.js"></script>
+    <script>
+    // Update mobile account link based on login status
+    function updateMobileNav() {
+        const accountLink = document.getElementById('mobile-account-link');
+        if (!accountLink) return;
+        
+        const isLoggedIn = localStorage.getItem('currentUser') !== null;
+        
+        if (isLoggedIn) {
+            // Logged in - go to profile/dashboard
+            accountLink.href = './pages/profile.html';
+            accountLink.innerHTML = `
+                <span>👤</span>
+                <span>Profile</span>
+            `;
+        } else {
+            // Guest - go to login
+            accountLink.href = './pages/login.html';
+            accountLink.innerHTML = `
+                <span>👤</span>
+                <span>Login</span>
+            `;
+        }
+    }
+    
+    // Run on page load
+    updateMobileNav();
+</script>
+</body>
+</html>
