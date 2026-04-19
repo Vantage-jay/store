@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Manage Products</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .admin-container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 1rem;
+        }
+        
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .product-form {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+        }
+        
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 0.875rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        .product-list {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .product-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+            align-items: center;
+        }
+        
+        .product-item img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 6px;
+        }
+        
+        .btn-delete {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .btn-edit {
+            background: #f59e0b;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">🌾 FarmFresh Admin</div>
+        <a href="../index.html">← View Store</a>
+    </nav>
+
+    <main class="admin-container">
+        <div class="admin-header">
+            <h1>🛡️ Manage Products</h1>
+            <div>
+                <span id="admin-name" style="color: #6b7280;"></span>
+            </div>
+        </div>
+
+        <div class="product-form">
+            <h3 id="form-title">Add New Product</h3>
+            <form id="product-form" onsubmit="return saveProduct(event)">
+                <input type="hidden" id="p-id">
+                
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Product Name *</label>
+                        <input type="text" id="p-name" required placeholder="e.g., Fresh Tomatoes">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Category *</label>
+                        <select id="p-category" required>
+                            <option value="">Select Category</option>
+                            <option value="Vegetables">Vegetables</option>
+                            <option value="Fruits">Fruits</option>
+                            <option value="Grains">Grains & Cereals</option>
+                            <option value="Tubers">Tubers</option>
+                            <option value="Poultry">Poultry</option>
+                            <option value="Livestock">Livestock</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Price (₦) *</label>
+                        <input type="number" id="p-price" required min="1" placeholder="2500">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Stock Quantity *</label>
+                        <input type="number" id="p-stock" required min="0" placeholder="20">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Unit (kg, basket, crate, etc.) *</label>
+                        <input type="text" id="p-unit" required placeholder="basket">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Availability</label>
+                        <input type="text" id="p-available" placeholder="Daily, Mon/Wed/Fri">
+                    </div>
+                    
+                    <div class="form-group full-width">
+                        <label>Image URL *</label>
+                        <input type="url" id="p-image" required placeholder="https://...">
+                    </div>
+                    
+                    <div class="form-group full-width">
+                        <label>Description *</label>
+                        <textarea id="p-desc" required rows="3" placeholder="Describe your product..."></textarea>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn-primary" style="margin-top: 1rem;">💾 Save Product</button>
+                <button type="button" onclick="resetForm()" style="margin-left: 0.5rem; padding: 0.875rem 1.5rem; background: #6b7280; color: white; border: none; border-radius: 6px; cursor: pointer;">Reset</button>
+            </form>
+        </div>
+
+        <div class="product-list">
+            <h3>Your Products</h3>
+            <div id="admin-product-list"></div>
+        </div>
+    </main>
+
+    <script src="../js/auth.js"></script>
+    <script>
+        // Check admin access
+        if (!auth.isAdmin()) {
+            alert('🔒 Admin access required');
+            window.location.href = '../index.html';
+        }
+        
+        document.getElementById('admin-name').textContent = `Logged in as: ${auth.currentUser?.email}`;
+        
+        let products = [];
+        
+        function loadProducts() {
+            const saved = localStorage.getItem('adminProducts');
+            products = saved ? JSON.parse(saved) : [];
+            renderProductList();
+        }
+        
+        function renderProductList() {
+            const container = document.getElementById('admin-product-list');
+            
+            if (products.length === 0) {
+                container.innerHTML = '<p style="color: #6b7280; text-align: center; padding: 2rem;">No products yet. Add your first product above!</p>';
+                return;
+            }
+            
+            container.innerHTML = products.map((p, index) => `
+                <div class="product-item">
+                    <img src="${p.image}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/80?text=No+Image'">
+                    <div style="flex: 1;">
+                        <h4>${p.name}</h4>
+                        <p style="color: #6b7280; font-size: 0.875rem;">${p.category} • ₦${p.price.toLocaleString()} • Stock: ${p.stock}</p>
+                    </div>
+                    <div>
+                        <button class="btn-edit" onclick="editProduct(${index})">Edit</button>
+                        <button class="btn-delete" onclick="deleteProduct(${index})">Delete</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function saveProduct(e) {
+            e.preventDefault();
+            
+            const id = document.getElementById('p-id').value;
+            const product = {
+                id: id ? parseInt(id) : Date.now(),
+                name: document.getElementById('p-name').value,
+                category: document.getElementById('p-category').value,
+                price: parseFloat(document.getElementById('p-price').value),
+                stock: parseInt(document.getElementById('p-stock').value),
+                unit: document.getElementById('p-unit').value,
+                available: document.getElementById('p-available').value || 'Daily',
+                image: document.getElementById('p-image').value,
+                description: document.getElementById('p-desc').value,
+                seller: 'FarmFresh Store'
+            };
+            
+            if (id) {
+                // Update existing
+                const index = products.findIndex(p => p.id === parseInt(id));
+                if (index !== -1) products[index] = product;
+            } else {
+                // Add new
+                products.push(product);
+            }
+            
+            localStorage.setItem('adminProducts', JSON.stringify(products));
+            
+            // Also update public products
+            localStorage.setItem('allProducts', JSON.stringify(products));
+            
+            alert('✅ Product saved!');
+            resetForm();
+            renderProductList();
+            return false;
+        }
+        
+        function editProduct(index) {
+            const p = products[index];
+            document.getElementById('p-id').value = p.id;
+            document.getElementById('p-name').value = p.name;
+            document.getElementById('p-category').value = p.category;
+            document.getElementById('p-price').value = p.price;
+            document.getElementById('p-stock').value = p.stock;
+            document.getElementById('p-unit').value = p.unit;
+            document.getElementById('p-available').value = p.available || '';
+            document.getElementById('p-image').value = p.image;
+            document.getElementById('p-desc').value = p.description;
+            document.getElementById('form-title').textContent = 'Edit Product';
+        }
+        
+        function deleteProduct(index) {
+            if (confirm('Delete this product?')) {
+                products.splice(index, 1);
+                localStorage.setItem('adminProducts', JSON.stringify(products));
+                localStorage.setItem('allProducts', JSON.stringify(products));
+                renderProductList();
+            }
+        }
+        
+        function resetForm() {
+            document.getElementById('product-form').reset();
+            document.getElementById('p-id').value = '';
+            document.getElementById('form-title').textContent = 'Add New Product';
+        }
+        
+        // Load on startup
+        loadProducts();
+    </script>
+</body>
+</html>
