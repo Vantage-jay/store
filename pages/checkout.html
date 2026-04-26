@@ -98,9 +98,7 @@
             color: var(--text);
         }
 
-        .checkout-card h3 i {
-            color: var(--primary);
-        }
+        .checkout-card h3 i { color: var(--primary); }
 
         .form-row {
             display: grid;
@@ -108,9 +106,7 @@
             gap: 1rem;
         }
 
-        .form-group {
-            margin-bottom: 1rem;
-        }
+        .form-group { margin-bottom: 1rem; }
 
         .form-group label {
             display: block;
@@ -196,7 +192,6 @@
             padding-top: 1rem;
         }
 
-        /* ===== PAYMENT OPTIONS - Fixed ===== */
         .payment-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -218,13 +213,11 @@
             user-select: none;
         }
 
-        .pay-option:hover {
-            border-color: #16a34a;
-        }
+        .pay-option:hover { border-color: #16a34a; }
 
-        .pay-option.active {
-            border-color: #16a34a;
-            background: #dcfce7;
+        .pay-option.pay-active {
+            border-color: #16a34a !important;
+            background: #dcfce7 !important;
         }
 
         .pay-icon { font-size: 1.75rem; }
@@ -235,7 +228,6 @@
             color: #1e293b;
         }
 
-        /* ===== WHATSAPP BUTTON ===== */
         .whatsapp-btn {
             width: 100%;
             padding: 1.25rem;
@@ -297,7 +289,6 @@
         <h1><i class="fas fa-lock" style="color: var(--primary);"></i> Checkout</h1>
         <p class="subtitle">Fill in your details and we'll send your order via WhatsApp</p>
 
-        <!-- Progress -->
         <div class="checkout-steps">
             <div class="step-item">
                 <div class="step-circle">1</div>
@@ -315,7 +306,6 @@
             </div>
         </div>
 
-        <!-- Order Summary -->
         <div class="checkout-card">
             <h3><i class="fas fa-box"></i> Order Summary</h3>
             <div id="checkout-items"></div>
@@ -335,7 +325,6 @@
             </div>
         </div>
 
-        <!-- Delivery Details -->
         <div class="checkout-card">
             <h3><i class="fas fa-map-marker-alt"></i> Delivery Details</h3>
             <div class="form-row">
@@ -362,11 +351,10 @@
             </div>
         </div>
 
-        <!-- Payment Method -->
         <div class="checkout-card">
             <h3><i class="fas fa-credit-card"></i> Payment Method</h3>
             <div class="payment-grid">
-                <div class="pay-option active" id="pay-cash" onclick="selectPay('cash')">
+                <div class="pay-option pay-active" id="pay-cash" onclick="selectPay('cash')">
                     <span class="pay-icon">💵</span>
                     <span class="pay-label">Cash on Delivery</span>
                 </div>
@@ -387,7 +375,6 @@
 
     </div>
 
-    <!-- Mobile Bottom Nav -->
     <nav class="mobile-nav">
         <a href="../index.html" class="mobile-link"><i class="fas fa-home"></i><span>Home</span></a>
         <a href="products.html" class="mobile-link"><i class="fas fa-store"></i><span>Shop</span></a>
@@ -395,6 +382,7 @@
         <a href="profile.html" class="mobile-link"><i class="fas fa-user"></i><span>Profile</span></a>
     </nav>
 
+    <!-- Load scripts first, then run init -->
     <script src="../js/auth.js"></script>
     <script src="../js/app.js"></script>
     <script src="../js/cart.js"></script>
@@ -403,33 +391,29 @@
         let selectedPayment = 'Cash on Delivery';
 
         function selectPay(type) {
-            // Remove active from all
-            document.getElementById('pay-cash').classList.remove('active');
-            document.getElementById('pay-transfer').classList.remove('active');
-
-            // Add active to clicked
+            document.getElementById('pay-cash').classList.remove('pay-active');
+            document.getElementById('pay-transfer').classList.remove('pay-active');
             if (type === 'cash') {
-                document.getElementById('pay-cash').classList.add('active');
+                document.getElementById('pay-cash').classList.add('pay-active');
                 selectedPayment = 'Cash on Delivery';
             } else {
-                document.getElementById('pay-transfer').classList.add('active');
+                document.getElementById('pay-transfer').classList.add('pay-active');
                 selectedPayment = 'Bank Transfer';
             }
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            if (!auth.isLoggedIn()) {
-                auth.redirectToLogin('Please login to checkout');
+        function initCheckout() {
+            // Check login
+            const savedUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+            if (!savedUser) {
+                window.location.href = 'login.html';
                 return;
             }
 
-            // Pre-fill user info directly from localStorage
-            const savedUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
-            if (savedUser) {
-                document.getElementById('delivery-name').value = savedUser.name || '';
-                document.getElementById('delivery-email').value = savedUser.email || '';
-                document.getElementById('delivery-phone').value = savedUser.phone || '';
-            }
+            // Pre-fill user info
+            document.getElementById('delivery-name').value = savedUser.name || '';
+            document.getElementById('delivery-email').value = savedUser.email || '';
+            document.getElementById('delivery-phone').value = savedUser.phone || '';
 
             // Handle saved addresses
             const addresses = JSON.parse(localStorage.getItem('userAddresses') || '[]');
@@ -452,19 +436,20 @@
                         placeholder="House number, street, area, city..."
                         style="display:none; width:100%; padding:0.875rem 1rem; border:2px solid #e2e8f0; border-radius:10px; font-size:0.95rem; font-family:inherit; background:#fafafa;"></textarea>
                 `;
-                // Auto-select first address
                 document.getElementById('address-select').value = addresses[0];
                 document.getElementById('delivery-address').value = addresses[0];
             }
 
-            // Show cart items
-            const items = cart.items;
-            if (items.length === 0) {
+            // Load cart directly from localStorage
+            const cartKey = `cart_${savedUser.id}`;
+            const cartData = JSON.parse(localStorage.getItem(cartKey) || '[]');
+
+            if (cartData.length === 0) {
                 window.location.href = 'cart.html';
                 return;
             }
 
-            document.getElementById('checkout-items').innerHTML = items.map(item => `
+            document.getElementById('checkout-items').innerHTML = cartData.map(item => `
                 <div class="order-item">
                     <img src="${item.image}" alt="${item.name}" onerror="this.src='https://via.placeholder.com/48'">
                     <div class="order-item-name">
@@ -475,14 +460,14 @@
                 </div>
             `).join('');
 
-            const subtotal = cart.getTotal();
+            const subtotal = cartData.reduce((sum, item) => sum + (item.price * item.quantity), 0);
             const shipping = subtotal > 10000 ? 0 : 1500;
             const total = subtotal + shipping;
 
             document.getElementById('subtotal-display').textContent = `₦${subtotal.toLocaleString()}`;
             document.getElementById('shipping-display').textContent = shipping === 0 ? 'FREE' : `₦${shipping.toLocaleString()}`;
             document.getElementById('total-display').textContent = `₦${total.toLocaleString()}`;
-        });
+        }
 
         function handleAddressSelect(value) {
             const textarea = document.getElementById('delivery-address');
@@ -500,12 +485,12 @@
         }
 
         function placeOrder() {
+            const savedUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
             const name = document.getElementById('delivery-name').value.trim();
             const phone = document.getElementById('delivery-phone').value.trim();
             const email = document.getElementById('delivery-email').value.trim();
             const notes = document.getElementById('delivery-notes').value.trim();
 
-            // Get address
             const select = document.getElementById('address-select');
             const address = select
                 ? (select.value === 'new' || select.value === ''
@@ -518,8 +503,10 @@
                 return;
             }
 
-            const items = cart.items;
-            const subtotal = cart.getTotal();
+            // Read cart directly from localStorage
+            const cartKey = `cart_${savedUser ? savedUser.id : 'guest'}`;
+            const cartData = JSON.parse(localStorage.getItem(cartKey) || '[]');
+            const subtotal = cartData.reduce((sum, item) => sum + (item.price * item.quantity), 0);
             const shipping = subtotal > 10000 ? 0 : 1500;
             const total = subtotal + shipping;
             const orderId = 'FF-' + Date.now();
@@ -531,7 +518,7 @@
             message += `Phone: ${phone}\n`;
             message += `Email: ${email}\n\n`;
             message += `📦 *Order Items*\n`;
-            items.forEach(item => {
+            cartData.forEach(item => {
                 message += `• ${item.name} x${item.quantity} = ₦${(item.price * item.quantity).toLocaleString()}\n`;
             });
             message += `\n💰 *Payment Summary*\n`;
@@ -545,8 +532,9 @@
             // Save order
             const order = {
                 id: orderId,
-                user: auth.currentUser ? auth.currentUser.id : null,
-                items, total,
+                user: savedUser ? savedUser.id : null,
+                items: cartData,
+                total,
                 delivery: { name, phone, email, address },
                 payment: selectedPayment,
                 status: 'Pending',
@@ -556,7 +544,7 @@
             orders.push(order);
             localStorage.setItem('orders', JSON.stringify(orders));
 
-            cart.clear();
+            // Clear cart
+            localStorage.removeItem(cartKey);
 
-            const encoded = encodeURIComponent(message);
-            window.open(`${WH
+     
