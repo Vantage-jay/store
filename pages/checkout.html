@@ -100,7 +100,6 @@
 
         .checkout-card h3 i {
             color: var(--primary);
-            font-size: 1rem;
         }
 
         .form-row {
@@ -132,7 +131,7 @@
             border-radius: 10px;
             font-size: 0.95rem;
             font-family: inherit;
-            transition: border-color 0.2s, box-shadow 0.2s;
+            transition: border-color 0.2s;
             background: #fafafa;
         }
 
@@ -197,45 +196,46 @@
             padding-top: 1rem;
         }
 
+        /* ===== PAYMENT OPTIONS - Fixed ===== */
         .payment-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 0.75rem;
         }
 
-        .payment-option {
+        .pay-option {
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 0.5rem;
             padding: 1rem;
-            border: 2px solid var(--border);
+            border: 2px solid #e2e8f0;
             border-radius: 12px;
             cursor: pointer;
             transition: all 0.2s;
             text-align: center;
+            background: white;
+            user-select: none;
         }
 
-        .payment-option:hover {
-            border-color: var(--primary);
-            background: var(--primary-light);
+        .pay-option:hover {
+            border-color: #16a34a;
         }
 
-        .payment-option.selected {
-            border-color: var(--primary);
-            background: var(--primary-light);
+        .pay-option.active {
+            border-color: #16a34a;
+            background: #dcfce7;
         }
 
-        .payment-option input[type="radio"] { display: none; }
+        .pay-icon { font-size: 1.75rem; }
 
-        .payment-icon { font-size: 1.75rem; }
-
-        .payment-label {
+        .pay-label {
             font-size: 0.8rem;
             font-weight: 600;
-            color: var(--text);
+            color: #1e293b;
         }
 
+        /* ===== WHATSAPP BUTTON ===== */
         .whatsapp-btn {
             width: 100%;
             padding: 1.25rem;
@@ -257,7 +257,6 @@
         .whatsapp-btn:hover {
             background: #128C7E;
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.5);
         }
 
         .whatsapp-btn i { font-size: 1.4rem; }
@@ -275,7 +274,6 @@
 
         @media (max-width: 600px) {
             .form-row { grid-template-columns: 1fr; }
-            .payment-grid { grid-template-columns: 1fr 1fr; }
         }
     </style>
 </head>
@@ -343,24 +341,21 @@
             <div class="form-row">
                 <div class="form-group">
                     <label>Full Name</label>
-                    <input type="text" id="delivery-name" placeholder="John Doe" required>
+                    <input type="text" id="delivery-name" placeholder="John Doe">
                 </div>
                 <div class="form-group">
                     <label>Phone Number</label>
-                    <input type="tel" id="delivery-phone" placeholder="+234 801 234 5678" required>
+                    <input type="tel" id="delivery-phone" placeholder="+234 801 234 5678">
                 </div>
             </div>
             <div class="form-group">
                 <label>Email Address</label>
-                <input type="email" id="delivery-email" placeholder="you@example.com" required>
+                <input type="email" id="delivery-email" placeholder="you@example.com">
             </div>
-
-            <!-- Address section — changes based on saved addresses -->
             <div class="form-group" id="address-section">
                 <label>Delivery Address</label>
-                <textarea id="delivery-address" rows="3" placeholder="House number, street, area, city..." required></textarea>
+                <textarea id="delivery-address" rows="3" placeholder="House number, street, area, city..."></textarea>
             </div>
-
             <div class="form-group">
                 <label>Delivery Notes (optional)</label>
                 <input type="text" id="delivery-notes" placeholder="e.g. Call when you arrive, leave at gate...">
@@ -371,20 +366,17 @@
         <div class="checkout-card">
             <h3><i class="fas fa-credit-card"></i> Payment Method</h3>
             <div class="payment-grid">
-    <div class="payment-option selected" onclick="selectPayment(this, 'Cash on Delivery')">
-        <input type="radio" name="payment" value="Cash on Delivery" checked>
-        <span class="payment-icon">💵</span>
-        <span class="payment-label">Cash on Delivery</span>
-    </div>
-    <div class="payment-option" onclick="selectPayment(this, 'Bank Transfer')">
-        <input type="radio" name="payment" value="Bank Transfer">
-        <span class="payment-icon">🏦</span>
-        <span class="payment-label">Bank Transfer</span>
-    </div>
+                <div class="pay-option active" id="pay-cash" onclick="selectPay('cash')">
+                    <span class="pay-icon">💵</span>
+                    <span class="pay-label">Cash on Delivery</span>
+                </div>
+                <div class="pay-option" id="pay-transfer" onclick="selectPay('transfer')">
+                    <span class="pay-icon">🏦</span>
+                    <span class="pay-label">Bank Transfer</span>
+                </div>
             </div>
         </div>
 
-        <!-- Place Order -->
         <button class="whatsapp-btn" onclick="placeOrder()">
             <i class="fab fa-whatsapp"></i> Send Order via WhatsApp
         </button>
@@ -400,7 +392,7 @@
         <a href="../index.html" class="mobile-link"><i class="fas fa-home"></i><span>Home</span></a>
         <a href="products.html" class="mobile-link"><i class="fas fa-store"></i><span>Shop</span></a>
         <a href="cart.html" class="mobile-link"><i class="fas fa-shopping-cart"></i><span>Cart</span></a>
-        <a href="profile.html" id="mobile-account-link" class="mobile-link"><i class="fas fa-user"></i><span>Profile</span></a>
+        <a href="profile.html" class="mobile-link"><i class="fas fa-user"></i><span>Profile</span></a>
     </nav>
 
     <script src="../js/auth.js"></script>
@@ -408,6 +400,22 @@
     <script src="../js/cart.js"></script>
     <script>
         const WHATSAPP_LINK = 'https://wa.me/2349128898846';
+        let selectedPayment = 'Cash on Delivery';
+
+        function selectPay(type) {
+            // Remove active from all
+            document.getElementById('pay-cash').classList.remove('active');
+            document.getElementById('pay-transfer').classList.remove('active');
+
+            // Add active to clicked
+            if (type === 'cash') {
+                document.getElementById('pay-cash').classList.add('active');
+                selectedPayment = 'Cash on Delivery';
+            } else {
+                document.getElementById('pay-transfer').classList.add('active');
+                selectedPayment = 'Bank Transfer';
+            }
+        }
 
         document.addEventListener('DOMContentLoaded', () => {
             if (!auth.isLoggedIn()) {
@@ -415,27 +423,25 @@
                 return;
             }
 
-            // Pre-fill user info
-const savedUser = JSON.parse(localStorage.getItem('currentUser'));
-if (savedUser) {
-    document.getElementById('delivery-name').value = savedUser.name || '';
-    document.getElementById('delivery-email').value = savedUser.email || '';
-    document.getElementById('delivery-phone').value = savedUser.phone || '';
-        }
+            // Pre-fill user info directly from localStorage
+            const savedUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+            if (savedUser) {
+                document.getElementById('delivery-name').value = savedUser.name || '';
+                document.getElementById('delivery-email').value = savedUser.email || '';
+                document.getElementById('delivery-phone').value = savedUser.phone || '';
+            }
+
             // Handle saved addresses
             const addresses = JSON.parse(localStorage.getItem('userAddresses') || '[]');
             const addressSection = document.getElementById('address-section');
 
             if (addresses.length === 1) {
-                // One address — auto fill
                 document.getElementById('delivery-address').value = addresses[0];
-
             } else if (addresses.length > 1) {
-                // Multiple addresses — show dropdown
                 addressSection.innerHTML = `
                     <label>Delivery Address</label>
                     <select id="address-select" onchange="handleAddressSelect(this.value)"
-                        style="width:100%; padding:0.875rem 1rem; border:2px solid var(--border); border-radius:10px; font-size:0.95rem; font-family:inherit; background:#fafafa; margin-bottom:0.75rem;">
+                        style="width:100%; padding:0.875rem 1rem; border:2px solid #e2e8f0; border-radius:10px; font-size:0.95rem; font-family:inherit; background:#fafafa; margin-bottom:0.75rem;">
                         <option value="">-- Select a saved address --</option>
                         ${addresses.map((addr, i) => `
                             <option value="${addr}">${i === 0 ? 'Default: ' : ''}${addr}</option>
@@ -444,16 +450,14 @@ if (savedUser) {
                     </select>
                     <textarea id="delivery-address" rows="3"
                         placeholder="House number, street, area, city..."
-                        style="display:none; width:100%; padding:0.875rem 1rem; border:2px solid var(--border); border-radius:10px; font-size:0.95rem; font-family:inherit; background:#fafafa;"></textarea>
+                        style="display:none; width:100%; padding:0.875rem 1rem; border:2px solid #e2e8f0; border-radius:10px; font-size:0.95rem; font-family:inherit; background:#fafafa;"></textarea>
                 `;
-
-                // Auto select default address
-                const select = document.getElementById('address-select');
-                select.value = addresses[0];
+                // Auto-select first address
+                document.getElementById('address-select').value = addresses[0];
                 document.getElementById('delivery-address').value = addresses[0];
             }
 
-            // Show order items
+            // Show cart items
             const items = cart.items;
             if (items.length === 0) {
                 window.location.href = 'cart.html';
@@ -495,20 +499,13 @@ if (savedUser) {
             }
         }
 
-        function selectPayment(el, value) {
-            document.querySelectorAll('.payment-option').forEach(opt => opt.classList.remove('selected'));
-            el.classList.add('selected');
-            el.querySelector('input').checked = true;
-        }
-
         function placeOrder() {
             const name = document.getElementById('delivery-name').value.trim();
             const phone = document.getElementById('delivery-phone').value.trim();
             const email = document.getElementById('delivery-email').value.trim();
             const notes = document.getElementById('delivery-notes').value.trim();
-            const payment = document.querySelector('input[name="payment"]:checked').value;
 
-            // Get address from select or textarea
+            // Get address
             const select = document.getElementById('address-select');
             const address = select
                 ? (select.value === 'new' || select.value === ''
@@ -527,7 +524,6 @@ if (savedUser) {
             const total = subtotal + shipping;
             const orderId = 'FF-' + Date.now();
 
-            // Build WhatsApp message
             let message = `🌾 *NEW FARMFRESH ORDER*\n`;
             message += `Order ID: *${orderId}*\n\n`;
             message += `👤 *Customer Details*\n`;
@@ -535,25 +531,32 @@ if (savedUser) {
             message += `Phone: ${phone}\n`;
             message += `Email: ${email}\n\n`;
             message += `📦 *Order Items*\n`;
-
             items.forEach(item => {
                 message += `• ${item.name} x${item.quantity} = ₦${(item.price * item.quantity).toLocaleString()}\n`;
             });
-
             message += `\n💰 *Payment Summary*\n`;
             message += `Subtotal: ₦${subtotal.toLocaleString()}\n`;
             message += `Delivery: ${shipping === 0 ? 'FREE' : '₦' + shipping.toLocaleString()}\n`;
             message += `*TOTAL: ₦${total.toLocaleString()}*\n\n`;
-            message += `💳 Payment Method: ${payment}\n\n`;
-            message += `📍 *Delivery Address*\n${address}\n`;
-            if (notes) message += `\n📝 Notes: ${notes}`;
+            message += `💳 Payment Method: ${selectedPayment}\n\n`;
+            message += `📍 *Delivery Address*\n${address}`;
+            if (notes) message += `\n\n📝 Notes: ${notes}`;
 
             // Save order
             const order = {
                 id: orderId,
-                user: auth.currentUser.id,
+                user: auth.currentUser ? auth.currentUser.id : null,
                 items, total,
                 delivery: { name, phone, email, address },
-                payment,
+                payment: selectedPayment,
                 status: 'Pending',
-                date: new Date().toISOStr
+                date: new Date().toISOString()
+            };
+            const orders = JSON.parse(localStorage.getItem('orders') || '[]');
+            orders.push(order);
+            localStorage.setItem('orders', JSON.stringify(orders));
+
+            cart.clear();
+
+            const encoded = encodeURIComponent(message);
+            window.open(`${WH
