@@ -371,16 +371,16 @@
         <div class="checkout-card">
             <h3><i class="fas fa-credit-card"></i> Payment Method</h3>
             <div class="payment-grid">
-                <label class="payment-option selected" onclick="selectPayment(this, 'Cash on Delivery')">
-                    <input type="radio" name="payment" value="Cash on Delivery" checked>
-                    <span class="payment-icon">💵</span>
-                    <span class="payment-label">Cash on Delivery</span>
-                </label>
-                <label class="payment-option" onclick="selectPayment(this, 'Bank Transfer')">
-                    <input type="radio" name="payment" value="Bank Transfer">
-                    <span class="payment-icon">🏦</span>
-                    <span class="payment-label">Bank Transfer</span>
-                </label>
+    <div class="payment-option selected" onclick="selectPayment(this, 'Cash on Delivery')">
+        <input type="radio" name="payment" value="Cash on Delivery" checked>
+        <span class="payment-icon">💵</span>
+        <span class="payment-label">Cash on Delivery</span>
+    </div>
+    <div class="payment-option" onclick="selectPayment(this, 'Bank Transfer')">
+        <input type="radio" name="payment" value="Bank Transfer">
+        <span class="payment-icon">🏦</span>
+        <span class="payment-label">Bank Transfer</span>
+    </div>
             </div>
         </div>
 
