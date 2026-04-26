@@ -9,7 +9,7 @@ const productDB = {
             return this.products;
         }
         
-        // Default farm products
+        // Your real farm products
         this.products = [
             {
                 id: 1,
@@ -17,123 +17,92 @@ const productDB = {
                 price: 2500,
                 category: "Vegetables",
                 image: "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=400",
-                description: "Vine-ripened red tomatoes, perfect for stews and salads",
+                description: "Vine-ripened red tomatoes, perfect for stews, soups and salads. Freshly harvested from our farm.",
                 stock: 20,
                 unit: "basket",
-                badge: "Best Seller"
+                badge: "Best Seller",
+                inStock: true
             },
             {
                 id: 2,
-                name: "Sweet Bell Peppers",
-                price: 1800,
+                name: "Fresh Pepper",
+                price: 1500,
                 category: "Vegetables",
-                image: "https://images.unsplash.com/photo-1518977676405-d4b7f8de6bef?w=400",
-                description: "Colorful mix of red, yellow and green peppers",
-                stock: 15,
+                image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400",
+                description: "Hot and flavorful peppers, freshly picked. Perfect for soups, stews and spicy dishes.",
+                stock: 18,
                 unit: "kg",
-                badge: "Fresh"
+                badge: "Fresh",
+                inStock: true
             },
             {
                 id: 3,
-                name: "Leafy Spinach",
+                name: "Cucumber",
                 price: 800,
                 category: "Vegetables",
-                image: "https://images.unsplash.com/photo-1576045057995-568f588f82fb?w=400",
-                description: "Crisp fresh spinach leaves, rich in iron",
+                image: "https://images.unsplash.com/photo-1449300079323-02e209d9d3a6?w=400",
+                description: "Cool, refreshing cucumbers. Great for salads, juicing and snacking.",
                 stock: 30,
-                unit: "bunch"
+                unit: "piece",
+                inStock: true
             },
             {
                 id: 4,
-                name: "Red Onions",
+                name: "Pawpaw (Papaya)",
                 price: 1200,
-                category: "Vegetables",
-                image: "https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?w=400",
-                description: "Pungent red onions, perfect for cooking",
-                stock: 25,
-                unit: "kg"
+                category: "Fruits",
+                image: "https://images.unsplash.com/photo-1526318472351-c75fcf070305?w=400",
+                description: "Sweet, ripe pawpaw rich in vitamins. Perfect for breakfast or as a healthy snack.",
+                stock: 15,
+                unit: "piece",
+                badge: "Fresh",
+                inStock: true
             },
             {
                 id: 5,
-                name: "Carrots",
-                price: 1000,
-                category: "Vegetables",
-                image: "https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?w=400",
-                description: "Sweet, crunchy orange carrots",
-                stock: 40,
-                unit: "bunch"
-            },
-            {
-                id: 6,
-                name: "Cucumber",
-                price: 600,
-                category: "Vegetables",
-                image: "https://images.unsplash.com/photo-1449300079323-02e209d9d3a6?w=400",
-                description: "Cool, refreshing cucumbers for salads",
-                stock: 35,
-                unit: "piece"
-            },
-            {
-                id: 7,
-                name: "Fresh Plantain",
-                price: 2000,
-                category: "Fruits",
-                image: "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=400",
-                description: "Ripe and unripe plantain available",
-                stock: 20,
-                unit: "bunch",
-                badge: "Popular"
-            },
-            {
-                id: 8,
                 name: "Watermelon",
                 price: 3500,
                 category: "Fruits",
                 image: "https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=400",
-                description: "Sweet, juicy watermelon. Perfect for hot days",
-                stock: 12,
-                unit: "piece"
+                description: "Big, sweet and juicy watermelon. Perfect for hot days and family gatherings.",
+                stock: 10,
+                unit: "piece",
+                badge: "Popular",
+                inStock: true
             },
             {
-                id: 9,
-                name: "Pineapple",
-                price: 1500,
-                category: "Fruits",
-                image: "https://images.unsplash.com/photo-1550258987-190a2d41a8ba?w=400",
-                description: "Tropical sweet pineapple, ripe and ready",
-                stock: 18,
-                unit: "piece"
-            },
-            {
-                id: 10,
-                name: "Oranges",
-                price: 2000,
-                category: "Fruits",
-                image: "https://images.unsplash.com/photo-1582979512210-99b6a53386f9?w=400",
-                description: "Juicy citrus oranges, vitamin C rich",
-                stock: 25,
-                unit: "kg"
-            },
-            {
-                id: 11,
-                name: "Sweet Potatoes",
-                price: 1500,
-                category: "Tubers",
-                image: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400",
-                description: "Orange flesh sweet potatoes, perfect for frying",
+                id: 6,
+                name: "Sweet Corn",
+                price: 500,
+                category: "Grains",
+                image: "https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=400",
+                description: "Tender, sweet corn freshly harvested. Great for boiling, roasting and cooking.",
                 stock: 50,
-                unit: "heap"
+                unit: "cob",
+                inStock: true
             },
             {
-                id: 12,
-                name: "Fresh Eggs",
-                price: 3500,
-                category: "Poultry",
-                image: "https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?w=400",
-                description: "Farm fresh eggs, 30 pieces per crate",
-                stock: 15,
-                unit: "crate",
-                badge: "Organic"
+                id: 7,
+                name: "Fresh Vegetables",
+                price: 800,
+                category: "Vegetables",
+                image: "https://images.unsplash.com/photo-1576045057995-568f588f82fb?w=400",
+                description: "Mixed fresh leafy vegetables including spinach, ugu and other greens. Freshly harvested daily.",
+                stock: 25,
+                unit: "bunch",
+                badge: "Daily Fresh",
+                inStock: true
+            },
+            {
+                id: 8,
+                name: "Okro",
+                price: 700,
+                category: "Vegetables",
+                image: "https://images.unsplash.com/photo-1615484477778-ca3b77940c25?w=400",
+                description: "Fresh, tender okro perfect for soups and stews. A Nigerian kitchen essential.",
+                stock: 0,
+                unit: "kg",
+                inStock: false
             }
         ];
         
@@ -155,24 +124,42 @@ function renderProducts(productsToShow = null) {
     const isGuest = !auth.isLoggedIn();
     
     if (products.length === 0) {
-        grid.innerHTML = '<p style="text-align: center; padding: 3rem; color: #64748b;">No products available.</p>';
+        grid.innerHTML = '<p style="text-align: center; padding: 3rem; color: #64748b;">No products in this category.</p>';
         return;
     }
     
     grid.innerHTML = products.map(product => {
-        const buttonHTML = isGuest 
-            ? `<button class="btn-guest" onclick="auth.redirectToLogin('Login to buy ${product.name}')">🔒 Login to Buy</button>`
-            : `<button class="btn-add" onclick="event.stopPropagation(); cart.addItem(${product.id})">+</button>`;
+        const isOutOfStock = !product.inStock || product.stock <= 0;
+
+        // Button logic
+        let buttonHTML;
+        if (isOutOfStock) {
+            buttonHTML = `<button class="btn-out-of-stock" disabled>Out of Stock</button>`;
+        } else if (isGuest) {
+            buttonHTML = `<button class="btn-guest" onclick="auth.redirectToLogin('Login to buy ${product.name}')">🔒 Login to Buy</button>`;
+        } else {
+            buttonHTML = `<button class="btn-add" onclick="event.stopPropagation(); cart.addItem(${product.id})">+</button>`;
+        }
         
         const badgeHTML = product.badge ? `<span class="product-badge">${product.badge}</span>` : '';
-        const stockHTML = product.stock < 5 ? `<span class="stock-badge">Only ${product.stock} left</span>` : '';
+        
+        // Stock warning - shows when 5 or less remaining
+        const stockHTML = (!isOutOfStock && product.stock <= 5 && product.stock > 0)
+            ? `<span class="stock-badge">Only ${product.stock} left!</span>`
+            : '';
+
+        // Out of stock overlay
+        const outOfStockOverlay = isOutOfStock
+            ? `<div class="out-of-stock-overlay"><span>Out of Stock</span></div>`
+            : '';
         
         return `
-        <div class="product-card" onclick="viewProduct(${product.id})">
+        <div class="product-card ${isOutOfStock ? 'out-of-stock-card' : ''}" onclick="viewProduct(${product.id})">
             <div class="product-image">
                 <img src="${product.image}" alt="${product.name}" loading="lazy" onerror="this.src='https://via.placeholder.com/300x220?text=${encodeURIComponent(product.name)}'">
                 ${badgeHTML}
                 ${stockHTML}
+                ${outOfStockOverlay}
             </div>
             <div class="product-info">
                 <span class="product-category">${product.category}</span>
@@ -180,7 +167,7 @@ function renderProducts(productsToShow = null) {
                 <p class="product-desc">${product.description}</p>
                 <div class="product-footer">
                     <div class="price-box">
-                        <span class="current-price">₦${product.price.toLocaleString()}</span>
+                        <span class="current-price" style="${isOutOfStock ? 'color: #94a3b8;' : ''}">₦${product.price.toLocaleString()}</span>
                         <span class="unit">per ${product.unit}</span>
                     </div>
                     ${buttonHTML}
@@ -195,7 +182,9 @@ function viewProduct(id) {
     const product = productDB.getById(id);
     if (!product) return;
     sessionStorage.setItem('currentProduct', JSON.stringify(product));
-    window.location.href = './pages/product-detail.html';
+    // Works from both root and pages/ folder
+    const base = window.location.pathname.includes('/pages/') ? '' : 'pages/';
+    window.location.href = base + 'product-detail.html';
 }
 
 function filterCategory(category) {
@@ -204,11 +193,25 @@ function filterCategory(category) {
     renderProducts(productDB.getByCategory(category));
 }
 
+let currentlyShowing = 6;
+
 function loadMore() {
-    alert('More products coming soon! Add products in admin panel.');
+    currentlyShowing += 6;
+    const all = productDB.getAll();
+    if (currentlyShowing >= all.length) {
+        const btn = document.querySelector('.load-more');
+        if (btn) btn.style.display = 'none';
+    }
+    renderProducts(all.slice(0, currentlyShowing));
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
     await productDB.load();
-    renderProducts();
+    const all = productDB.getAll();
+    if (all.length <= 6) {
+        const btn = document.querySelector('.load-more');
+        if (btn) btn.style.display = 'none';
+    }
+    renderProducts(all.slice(0, 6));
 });
+    
