@@ -187,8 +187,8 @@ function viewProduct(id) {
 }
 
 function filterCategory(category) {
-    document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
-    event.target.closest('.pill').classList.add('active');
+    document.querySelectorAll('.pill, .cat-btn').forEach(p => p.classList.remove('active'));
+    event.target.closest('.pill, .cat-btn').classList.add('active');
     renderProducts(productDB.getByCategory(category));
 }
 
