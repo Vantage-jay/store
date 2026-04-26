@@ -416,13 +416,12 @@
             }
 
             // Pre-fill user info
-            const user = auth.currentUser;
-            if (user) {
-                document.getElementById('delivery-name').value = user.name || '';
-                document.getElementById('delivery-email').value = user.email || '';
-                document.getElementById('delivery-phone').value = user.phone || '';
-            }
-
+const savedUser = JSON.parse(localStorage.getItem('currentUser'));
+if (savedUser) {
+    document.getElementById('delivery-name').value = savedUser.name || '';
+    document.getElementById('delivery-email').value = savedUser.email || '';
+    document.getElementById('delivery-phone').value = savedUser.phone || '';
+        }
             // Handle saved addresses
             const addresses = JSON.parse(localStorage.getItem('userAddresses') || '[]');
             const addressSection = document.getElementById('address-section');
