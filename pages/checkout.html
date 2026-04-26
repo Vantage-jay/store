@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - FarmFresh</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .checkout-page {
+            max-width: 700px;
+            margin: 5rem auto 3rem;
+            padding: 1rem;
+        }
+
+        .checkout-page h1 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .checkout-page .subtitle {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Progress Steps */
+        .checkout-steps {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2rem;
+            background: white;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        .step-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex: 1;
+        }
+
+        .step-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.875rem;
+            flex-shrink: 0;
+        }
+
+        .step-circle.inactive {
+            background: #e2e8f0;
+            color: var(--text-light);
+        }
+
+        .step-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .step-line {
+            flex: 1;
+            height: 2px;
+            background: #e2e8f0;
+            margin: 0 0.5rem;
+        }
+
+        /* Cards */
+        .checkout-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1.25rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            border: 1px solid var(--border);
+        }
+
+        .checkout-card h3 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            color: var(--text);
+        }
+
+        .checkout-card h3 i {
+            color: var(--primary);
+            font-size: 1rem;
+        }
+
+        /* Form */
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.8rem;
+            margin-bottom: 0.4rem;
+            color: var(--text);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-family: inherit;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            background: #fafafa;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
+            background: white;
+        }
+
+        /* Order Summary */
+        .order-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .order-item:last-child { border-bottom: none; }
+
+        .order-item img {
+            width: 48px;
+            height: 48px;
+            object-fit: cover;
+            border-radius: 8px;
+            flex-shrink: 0;
+        }
+
+        .order-item-name {
+            flex: 1;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .order-item-qty {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        .order-item-price {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 0.95rem;
+        }
+
+        .totals-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .totals-row.grand-total {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--text);
+            border-top: 2px solid var(--border);
+            margin-top: 0.5rem;
+            padding-top: 1rem;
+        }
+
+        /* Payment options */
+        .payment-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+        }
+
+        .payment-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .payment-option:hover {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        .payment-option.selected {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        .payment-option input[type="radio"] {
+            display: none;
+        }
+
+        .payment-icon { font-size: 1.75rem; }
+
+        .payment-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        /* WhatsApp Button */
+        .whatsapp-btn {
+            width: 100%;
+            padding: 1.25rem;
+            background: #25D366;
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+        }
+
+        .whatsapp-btn:hover {
+            background: #128C7E;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.5);
+        }
+
+        .whatsapp-btn i { font-size: 1.4rem; }
+
+        .secure-note {
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-light);
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+        }
+
+        @media (max-width: 600px) {
+            .form-row { grid-template-columns: 1fr; }
+            .payment-grid { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-brand">
+            <div class="logo-badge"><i class="fas fa-seedling"></i></div>
+            <div class="brand-text">
+                <span class="brand-name">FarmFresh</span>
+                <span class="brand-tag">Premium Farm Produce</span>
+            </div>
+        </div>
+        <a href="cart.html" style="color: var(--text-light); text-decoration: none; font-weight: 500; display: flex; align-items: center; gap: 0.4rem;">
+            <i class="fas fa-arrow-left"></i> Back to Cart
+        </a>
+    </nav>
+
+    <div class="checkout-page">
+
+        <h1><i class="fas fa-lock" style="color: var(--primary);"></i> Checkout</h1>
+        <p class="subtitle">Fill in your details and we'll send your order via WhatsApp</p>
+
+        <!-- Progress -->
+        <div class="checkout-steps">
+            <div class="step-item">
+                <div class="step-circle">1</div>
+                <span class="step-label">Details</span>
+            </div>
+            <div class="step-line"></div>
+            <div class="step-item">
+                <div class="step-circle">2</div>
+                <span class="step-label">Payment</span>
+            </div>
+            <div class="step-line"></div>
+            <div class="step-item">
+                <div class="step-circle inactive">3</div>
+                <span class="step-label" style="color: var(--text-light);">Confirm</span>
+            </div>
+        </div>
+
+        <!-- Order Summary -->
+        <div class="checkout-card">
+            <h3><i class="fas fa-box"></i> Order Summary</h3>
+            <div id="checkout-items"></div>
+            <div style="margin-top: 1rem;">
+                <div class="totals-row">
+                    <span>Subtotal</span>
+                    <span id="subtotal-display">₦0</span>
+                </div>
+                <div class="totals-row">
+                    <span>Delivery fee</span>
+                    <span id="shipping-display">₦1,500</span>
+                </div>
+                <div class="totals-row grand-total">
+                    <span>Total</span>
+                    <span id="total-display">₦0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Delivery Details -->
+        <div class="checkout-card">
+            <h3><i class="fas fa-map-marker-alt"></i> Delivery Details</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="delivery-name" placeholder="John Doe" required>
+                </div>
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="tel" id="delivery-phone" placeholder="+234 801 234 5678" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" id="delivery-email" placeholder="you@example.com" required>
+            </div>
+            <div class="form-group">
+                <label>Delivery Address</label>
+                <textarea id="delivery-address" rows="3" placeholder="House number, street, area, city..." required></textarea>
+            </div>
+            <div class="form-group">
+                <label>Delivery Notes (optional)</label>
+                <input type="text" id="delivery-notes" placeholder="e.g. Call when you arrive, leave at gate...">
+            </div>
+        </div>
+
+        <!-- Payment Method -->
+        <div class="checkout-card">
+            <h3><i class="fas fa-credit-card"></i> Payment Method</h3>
+            <div class="payment-grid">
+                <label class="payment-option selected" onclick="selectPayment(this, 'Cash on Delivery')">
+                    <input type="radio" name="payment" value="Cash on Delivery" checked>
+                    <span class="payment-icon">💵</span>
+                    <span class="payment-label">Cash on Delivery</span>
+                </label>
+                <label class="payment-option" onclick="selectPayment(this, 'Bank Transfer')">
+                    <input type="radio" name="payment" value="Bank Transfer">
+                    <span class="payment-icon">🏦</span>
+                    <span class="payment-label">Bank Transfer</span>
+                </label>
+                <label class="payment-option" onclick="selectPayment(this, 'Mobile Money')">
+                    <input type="radio" name="payment" value="Mobile Money">
+                    <span class="payment-icon">📱</span>
+                    <span class="payment-label">Mobile Money</span>
+                </label>
+                <label class="payment-option" onclick="selectPayment(this, 'POS on Delivery')">
+                    <input type="radio" name="payment" value="POS on Delivery">
+                    <span class="payment-icon">💳</span>
+                    <span class="payment-label">POS on Delivery</span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Place Order -->
+        <button class="whatsapp-btn" onclick="placeOrder()">
+            <i class="fab fa-whatsapp"></i> Send Order via WhatsApp
+        </button>
+
+        <p class="secure-note">
+            <i class="fas fa-lock"></i> Your order will be sent directly to our WhatsApp for confirmation
+        </p>
+
+    </div>
+
+    <!-- Mobile Bottom Nav -->
+    <nav class="mobile-nav">
+        <a href="../index.html" class="mobile-link"><i class="fas fa-home"></i><span>Home</span></a>
+        <a href="products.html" class="mobile-link"><i class="fas fa-store"></i><span>Shop</span></a>
+        <a href="cart.html" class="mobile-link"><i class="fas fa-shopping-cart"></i><span>Cart</span></a>
+        <a href="profile.html" id="mobile-account-link" class="mobile-link"><i class="fas fa-user"></i><span>Profile</span></a>
+    </nav>
+
+    <script src="../js/auth.js"></script>
+    <script src="../js/app.js"></script>
+    <script src="../js/cart.js"></script>
+    <script>
+        // ⬇️ PUT YOUR WHATSAPP NUMBER HERE (include country code, no + or spaces)
+        const WHATSAPP_NUMBER = '2348012345678';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (!auth.isLoggedIn()) {
+                auth.redirectToLogin('Please login to checkout');
+                return;
+            }
+
+            // Pre-fill user info
+            const user = auth.currentUser;
+            if (user) {
+                document.getElementById('delivery-name').value = user.name || '';
+                document.getElementById('delivery-email').value = user.email || '';
+                document.getElementById('delivery-phone').value = user.phone || '';
+            }
+
+            // Show order items
+            const items = cart.items;
+            if (items.length === 0) {
+                window.location.href = 'cart.html';
+                return;
+            }
+
+            document.getElementById('checkout-items').innerHTML = items.map(item => `
+                <div class="order-item">
+                    <img src="${item.image}" alt="${item.name}" onerror="this.src='https://via.placeholder.com/48'">
+                    <div class="order-item-name">
+                        ${item.name}
+                        <div class="order-item-qty">x${item.quantity}</div>
+                    </div>
+                    <span class="order-item-price">₦${(item.price * item.quantity).toLocaleString()}</span>
+                </div>
+            `).join('');
+
+            const subtotal = cart.getTotal();
+            const shipping = subtotal > 10000 ? 0 : 1500;
+            const total = subtotal + shipping;
+
+            document.getElementById('subtotal-display').textContent = `₦${subtotal.toLocaleString()}`;
+            document.getElementById('shipping-display').textContent = shipping === 0 ? 'FREE' : `₦${shipping.toLocaleString()}`;
+            document.getElementById('total-display').textContent = `₦${total.toLocaleString()}`;
+        });
+
+        function selectPayment(el, value) {
+            document.querySelectorAll('.payment-option').forEach(opt => opt.classList.remove('selected'));
+            el.classList.add('selected');
+            el.querySelector('input').checked = true;
+        }
+
+        function placeOrder() {
+            const name = document.getElementById('delivery-name').value.trim();
+            const phone = document.getElementById('delivery-phone').value.trim();
+            const email = document.getElementById('delivery-email').value.trim();
+            const address = document.getElementById('delivery-address').value.trim();
+            const notes = document.getElementById('delivery-notes').value.trim();
+            const payment = document.querySelector('input[name="payment"]:checked').value;
+
+            if (!name || !phone || !email || !address) {
+                alert('⚠️ Please fill in all required delivery details.');
+                return;
+            }
+
+            const items = cart.items;
+            const subtotal = cart.getTotal();
+            const shipping = subtotal > 10000 ? 0 : 1500;
+            const total = subtotal + shipping;
+            const orderId = 'FF-' + Date.now();
+
+            // Build WhatsApp message
+            let message = `🌾 *NEW FARMFRESH ORDER*\n`;
+            message += `Order ID: *${orderId}*\n\n`;
+            message += `👤 *Customer Details*\n`;
+            message += `Name: ${name}\n`;
+            message += `Phone: ${phone}\n`;
+            message += `Email: ${email}\n\n`;
+            message += `📦 *Order Items*\n`;
+
+            items.forEach(item => {
+                message += `• ${item.name} x${item.quantity} = ₦${(item.price * item.quantity).toLocaleString()}\n`;
+            });
+
+            message += `\n💰 *Payment Summary*\n`;
+            message += `Subtotal: ₦${subtotal.toLocaleString()}\n`;
+            message += `Delivery: ${shipping === 0 ? 'FREE' : '₦' + shipping.toLocaleString()}\n`;
+            message += `*TOTAL: ₦${total.toLocaleString()}*\n\n`;
+            message += `💳 Payment Method: ${payment}\n\n`;
+            message += `📍 *Delivery Address*\n${address}\n`;
+            if (notes) message += `\n📝 Notes: ${notes}`;
+
+            // Save order to localStorage
+            const order = { id: orderId, items, total, delivery: { name, phone, email, address }, payment, status: 'Pending', date: new Date().toISOString() };
+            const orders = JSON.parse(localStorage.getItem('orders') || '[]');
+            orders.push(order);
+            localStorage.setItem('orders', JSON.stringify(orders));
+
+            // Clear cart
+            cart.clear();
+
+            // Open WhatsApp
+            const encoded = encodeURIComponent(message);
+            window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encoded}`, '_blank');
+
+            // Redirect home
+            setTimeout(() => { window.location.href = '../index.html'; }, 1000);
+        }
+    </script>
+</body>
+</html>
