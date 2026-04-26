@@ -3,109 +3,284 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Products - FarmFresh Store</title>
+    <title>Shop - FarmFresh Store</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../css/style.css">
+    <script defer src="/_vercel/insights/script.js"></script>
+    <script defer src="/_vercel/speed-insights/script.js"></script>
     <style>
         .products-container {
             max-width: 1200px;
-            margin: 0 auto;
+            margin: 5rem auto 5rem;
             padding: 1rem;
         }
-        
+
         .page-header {
-            text-align: center;
-            margin-bottom: 2rem;
+            background: linear-gradient(135deg, #15803d 0%, #16a34a 60%, #22c55e 100%);
+            border-radius: 16px;
+            padding: 2rem 1.5rem;
+            margin-bottom: 1.5rem;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
         }
-        
+
+        .page-header-left h1 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            margin-bottom: 0.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .page-header-left p {
+            opacity: 0.9;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .page-header-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 0.5rem;
+        }
+
+        .header-stat {
+            background: rgba(255,255,255,0.2);
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            white-space: nowrap;
+        }
+
+        .guest-banner-box {
+            background: #fef3c7;
+            border: 1px solid #f59e0b;
+            border-radius: 12px;
+            padding: 0.875rem 1.25rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.9rem;
+        }
+
+        .guest-banner-box i {
+            color: #d97706;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .guest-banner-box a {
+            color: #16a34a;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
         .category-filter {
             display: flex;
             gap: 0.5rem;
             overflow-x: auto;
-            padding-bottom: 1rem;
-            margin-bottom: 2rem;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.25rem;
+            scrollbar-width: none;
         }
-        
+
+        .category-filter::-webkit-scrollbar { display: none; }
+
         .cat-btn {
-            padding: 0.75rem 1.5rem;
-            border: 2px solid #e5e7eb;
+            padding: 0.6rem 1.25rem;
+            border: 2px solid var(--border);
             background: white;
-            border-radius: 25px;
+            border-radius: 50px;
             cursor: pointer;
             white-space: nowrap;
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: var(--text-light);
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
         }
-        
+
+        .cat-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
         .cat-btn.active {
-            background: #2563eb;
+            background: var(--primary);
             color: white;
-            border-color: #2563eb;
+            border-color: var(--primary);
+        }
+
+        .product-count {
+            font-size: 0.875rem;
+            color: var(--text-light);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .product-count span {
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        @media (max-width: 600px) {
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .page-header-right {
+                flex-direction: row;
+                align-items: flex-start;
+            }
         }
     </style>
-    <script defer src="/_vercel/insights/script.js"></script>
-    <script defer src="/_vercel/speed-insights/script.js"></script>
 </head>
 <body>
+
     <nav class="navbar">
-        <div class="logo">🌾 FarmFresh</div>
-        <div class="nav-links">
-            <a href="../index.html">Home</a>
-            <a href="products.html">Products</a>
-            <a href="cart.html">Cart (<span id="cart-count">0</span>)</a>
-            <a href="admin-products.html" id="admin-link" style="display: none;">🛡️ Admin</a>
+        <div class="nav-brand">
+            <div class="logo-badge"><i class="fas fa-seedling"></i></div>
+            <div class="brand-text">
+                <span class="brand-name">FarmFresh</span>
+                <span class="brand-tag">Premium Farm Produce</span>
+            </div>
         </div>
-        <div class="auth-links">
-            <span id="user-name" style="color: #2563eb; font-weight: bold; display: none;"></span>
-            <a href="login.html" id="login-btn">Login</a>
-            <a href="#" id="logout-btn" style="display:none" onclick="auth.logout(); return false;">Logout</a>
+        <div class="nav-center">
+            <a href="../index.html" class="nav-link"><i class="fas fa-home"></i> Home</a>
+            <a href="products.html" class="nav-link active"><i class="fas fa-store"></i> Shop</a>
+            <a href="cart.html" class="nav-link cart-link">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="cart-badge" id="cart-count">0</span>
+            </a>
+            <a href="admin-products.html" id="admin-link" class="nav-link" style="display:none;">
+                <i class="fas fa-shield-alt"></i> Admin
+            </a>
+        </div>
+        <div class="nav-auth">
+            <div id="user-profile" style="display:none;">
+                <div class="user-avatar"><i class="fas fa-user-circle"></i></div>
+                <span id="user-name"></span>
+            </div>
+            <a href="login.html" id="login-btn" class="btn-primary-sm">
+                <i class="fas fa-sign-in-alt"></i> Sign In
+            </a>
+            <button id="logout-btn" style="display:none;" class="btn-ghost" onclick="auth.logout()">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
         </div>
     </nav>
 
-    <!-- Guest Banner -->
-    <div id="guest-banner" style="display: none; background: #fef3c7; padding: 1rem; text-align: center; border-bottom: 2px solid #f59e0b;">
-        <p>🔒 <strong>Browsing as Guest</strong> — <a href="login.html" style="color: #2563eb; font-weight: 600;">Login or Register</a> to purchase fresh farm products</p>
-    </div>
-
     <main class="products-container">
+
         <div class="page-header">
-            <h1>Fresh Farm Products</h1>
-            <p>Direct from our farm to your table</p>
+            <div class="page-header-left">
+                <h1><i class="fas fa-store"></i> Our Products</h1>
+                <p><i class="fas fa-truck"></i> Fresh from farm — harvested daily</p>
+            </div>
+            <div class="page-header-right">
+                <div class="header-stat"><i class="fas fa-leaf"></i> 100% Organic</div>
+                <div class="header-stat"><i class="fas fa-bolt"></i> Same Day Delivery</div>
+            </div>
         </div>
-    
+
+        <div id="guest-banner" style="display:none;">
+            <div class="guest-banner-box">
+                <i class="fas fa-lock"></i>
+                <p><strong>Browsing as Guest</strong> — <a href="login.html">Login or Register</a> to purchase fresh farm products</p>
+            </div>
+        </div>
 
         <div class="category-filter">
-            <button class="cat-btn active" data-category="all" onclick="filterCategory('all')">All</button>
-            <button class="cat-btn" data-category="Vegetables" onclick="filterCategory('Vegetables')">Vegetables</button>
-            <button class="cat-btn" data-category="Fruits" onclick="filterCategory('Fruits')">Fruits</button>
-            <button class="cat-btn" data-category="Grains" onclick="filterCategory('Grains')">Grains</button>
-            <button class="cat-btn" data-category="Tubers" onclick="filterCategory('Tubers')">Tubers</button>
-            <button class="cat-btn" data-category="Poultry" onclick="filterCategory('Poultry')">Poultry</button>
-            
+            <button class="cat-btn active" onclick="filterCategory('all')">
+                <i class="fas fa-border-all"></i> All
+            </button>
+            <button class="cat-btn" onclick="filterCategory('Vegetables')">
+                <i class="fas fa-carrot"></i> Vegetables
+            </button>
+            <button class="cat-btn" onclick="filterCategory('Fruits')">
+                <i class="fas fa-apple-alt"></i> Fruits
+            </button>
+            <button class="cat-btn" onclick="filterCategory('Grains')">
+                <i class="fas fa-seedling"></i> Grains
+            </button>
+            <button class="cat-btn" onclick="filterCategory('Tubers')">
+                <i class="fas fa-circle"></i> Tubers
+            </button>
+            <button class="cat-btn" onclick="filterCategory('Poultry')">
+                <i class="fas fa-egg"></i> Poultry
+            </button>
         </div>
 
+        <p class="product-count">
+            <i class="fas fa-box"></i>
+            Showing <span id="product-count-num">0</span> products
+        </p>
+
         <div id="product-grid" class="product-grid"></div>
+
     </main>
+
+    <nav class="mobile-nav">
+        <a href="../index.html" class="mobile-link"><i class="fas fa-home"></i><span>Home</span></a>
+        <a href="products.html" class="mobile-link active"><i class="fas fa-store"></i><span>Shop</span></a>
+        <a href="cart.html" class="mobile-link"><i class="fas fa-shopping-cart"></i><span>Cart</span></a>
+        <a href="profile.html" id="mobile-account-link" class="mobile-link"><i class="fas fa-user"></i><span>Profile</span></a>
+    </nav>
 
     <script src="../js/auth.js"></script>
     <script src="../js/app.js"></script>
     <script src="../js/cart.js"></script>
     <script>
-        // Load products from admin storage
+        function updateCount(num) {
+            const el = document.getElementById('product-count-num');
+            if (el) el.textContent = num;
+        }
+
+        function filterCategory(category) {
+            document.querySelectorAll('.cat-btn').forEach(p => p.classList.remove('active'));
+            event.target.closest('.cat-btn').classList.add('active');
+            const filtered = productDB.getByCategory(category);
+            renderProducts(filtered);
+            updateCount(filtered.length);
+        }
+
         function loadPublicProducts() {
             const adminProducts = localStorage.getItem('adminProducts');
             if (adminProducts) {
-                // Parse and set to productDB
                 const products = JSON.parse(adminProducts);
                 productDB.products = products;
                 renderProducts(products);
+                updateCount(products.length);
             } else {
-                // Fallback to JSON file
-                productDB.load().then(() => renderProducts());
+                productDB.load().then(() => {
+                    const all = productDB.getAll();
+                    renderProducts(all);
+                    updateCount(all.length);
+                });
             }
         }
-        
-        // Override the load
+
         document.addEventListener('DOMContentLoaded', () => {
             loadPublicProducts();
         });
     </script>
 </body>
-</html>
+    </html>
+                
