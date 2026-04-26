@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Cart - FarmFresh</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .cart-page {
+            max-width: 900px;
+            margin: 5rem auto 2rem;
+            padding: 1rem;
+        }
+
+        .cart-page h1 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .cart-layout {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        .cart-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+            align-items: center;
+        }
+
+        .cart-item img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+            flex-shrink: 0;
+        }
+
+        .item-details { flex: 1; }
+
+        .item-details h4 {
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+            font-size: 0.95rem;
+        }
+
+        .item-price {
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        .item-seller {
+            font-size: 0.75rem;
+            color: var(--text-light);
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 0.25rem;
+        }
+
+        .quantity-controls button {
+            width: 30px;
+            height: 30px;
+            border: none;
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 700;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .quantity-controls span {
+            width: 28px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        .item-total {
+            font-weight: 800;
+            color: var(--text);
+            font-size: 1rem;
+            white-space: nowrap;
+        }
+
+        .remove-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            padding: 0.25rem;
+            opacity: 0.5;
+            transition: opacity 0.2s;
+        }
+
+        .remove-btn:hover { opacity: 1; }
+
+        #cart-summary {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 5rem;
+        }
+
+        #cart-summary h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 1.25rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.875rem;
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .summary-row.total {
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: var(--primary);
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+            margin-top: 0.5rem;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 1rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 1.25rem;
+            transition: all 0.2s;
+        }
+
+        .checkout-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            grid-column: 1 / -1;
+        }
+
+        .empty-cart h3 {
+            font-size: 1.25rem;
+            margin: 1rem 0 0.5rem;
+        }
+
+        .empty-cart p {
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-shop {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.875rem 1.5rem;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .cart-layout {
+                grid-template-columns: 1fr;
+            }
+
+            #cart-summary {
+                position: static;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-brand">
+            <div class="logo-badge"><i class="fas fa-seedling"></i></div>
+            <div class="brand-text">
+                <span class="brand-name">FarmFresh</span>
+                <span class="brand-tag">Premium Farm Produce</span>
+            </div>
+        </div>
+        <div class="nav-center">
+            <a href="../index.html" class="nav-link"><i class="fas fa-home"></i> Home</a>
+            <a href="products.html" class="nav-link"><i class="fas fa-store"></i> Shop</a>
+            <a href="cart.html" class="nav-link active cart-link">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="cart-badge" id="cart-count">0</span>
+            </a>
+        </div>
+        <div class="nav-auth">
+            <div id="user-profile" style="display:none;">
+                <div class="user-avatar"><i class="fas fa-user-circle"></i></div>
+                <span id="user-name"></span>
+            </div>
+            <a href="login.html" id="login-btn" class="btn-primary-sm">
+                <i class="fas fa-sign-in-alt"></i> Sign In
+            </a>
+            <button id="logout-btn" style="display:none;" class="btn-ghost" onclick="auth.logout()">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+    </nav>
+
+    <!-- Cart Content -->
+    <div class="cart-page">
+        <h1><i class="fas fa-shopping-cart" style="color: var(--primary);"></i> Your Cart</h1>
+        <div class="cart-layout">
+            <div id="cart-items"></div>
+            <div id="cart-summary" style="display:none;"></div>
+        </div>
+    </div>
+
+    <!-- Mobile Bottom Nav -->
+    <nav class="mobile-nav">
+        <a href="../index.html" class="mobile-link">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="products.html" class="mobile-link">
+            <i class="fas fa-store"></i>
+            <span>Shop</span>
+        </a>
+        <a href="cart.html" class="mobile-link active">
+            <i class="fas fa-shopping-cart"></i>
+            <span>Cart</span>
+        </a>
+        <a href="profile.html" id="mobile-account-link" class="mobile-link">
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <!-- Load auth FIRST, then app, then cart -->
+    <script src="../js/auth.js"></script>
+    <script src="../js/app.js"></script>
+    <script src="../js/cart.js"></script>
+
+</body>
+</html>
