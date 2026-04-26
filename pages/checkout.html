@@ -6,6 +6,8 @@
     <title>Checkout - FarmFresh</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../css/style.css">
+    <script defer src="/_vercel/insights/script.js"></script>
+    <script defer src="/_vercel/speed-insights/script.js"></script>
     <style>
         .checkout-page {
             max-width: 700px;
@@ -28,7 +30,6 @@
             margin-bottom: 2rem;
         }
 
-        /* Progress Steps */
         .checkout-steps {
             display: flex;
             align-items: center;
@@ -78,7 +79,6 @@
             margin: 0 0.5rem;
         }
 
-        /* Cards */
         .checkout-card {
             background: white;
             border-radius: 16px;
@@ -103,7 +103,6 @@
             font-size: 1rem;
         }
 
-        /* Form */
         .form-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -138,14 +137,14 @@
         }
 
         .form-group input:focus,
-        .form-group textarea:focus {
+        .form-group textarea:focus,
+        .form-group select:focus {
             outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
             background: white;
         }
 
-        /* Order Summary */
         .order-item {
             display: flex;
             align-items: center;
@@ -198,7 +197,6 @@
             padding-top: 1rem;
         }
 
-        /* Payment options */
         .payment-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -228,9 +226,7 @@
             background: var(--primary-light);
         }
 
-        .payment-option input[type="radio"] {
-            display: none;
-        }
+        .payment-option input[type="radio"] { display: none; }
 
         .payment-icon { font-size: 1.75rem; }
 
@@ -240,7 +236,6 @@
             color: var(--text);
         }
 
-        /* WhatsApp Button */
         .whatsapp-btn {
             width: 100%;
             padding: 1.25rem;
@@ -283,12 +278,9 @@
             .payment-grid { grid-template-columns: 1fr 1fr; }
         }
     </style>
-    <script defer src="/_vercel/insights/script.js"></script>
-    <script defer src="/_vercel/speed-insights/script.js"></script>
 </head>
 <body>
 
-    <!-- Navbar -->
     <nav class="navbar">
         <div class="nav-brand">
             <div class="logo-badge"><i class="fas fa-seedling"></i></div>
@@ -362,10 +354,13 @@
                 <label>Email Address</label>
                 <input type="email" id="delivery-email" placeholder="you@example.com" required>
             </div>
-            <div class="form-group">
+
+            <!-- Address section — changes based on saved addresses -->
+            <div class="form-group" id="address-section">
                 <label>Delivery Address</label>
                 <textarea id="delivery-address" rows="3" placeholder="House number, street, area, city..." required></textarea>
             </div>
+
             <div class="form-group">
                 <label>Delivery Notes (optional)</label>
                 <input type="text" id="delivery-notes" placeholder="e.g. Call when you arrive, leave at gate...">
@@ -386,6 +381,8 @@
                     <span class="payment-icon">🏦</span>
                     <span class="payment-label">Bank Transfer</span>
                 </label>
+            </div>
+        </div>
 
         <!-- Place Order -->
         <button class="whatsapp-btn" onclick="placeOrder()">
@@ -410,7 +407,6 @@
     <script src="../js/app.js"></script>
     <script src="../js/cart.js"></script>
     <script>
-        // ⬇️ PUT YOUR WHATSAPP NUMBER HERE (include country code, no + or spaces)
         const WHATSAPP_LINK = 'https://wa.me/2349128898846';
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -425,6 +421,37 @@
                 document.getElementById('delivery-name').value = user.name || '';
                 document.getElementById('delivery-email').value = user.email || '';
                 document.getElementById('delivery-phone').value = user.phone || '';
+            }
+
+            // Handle saved addresses
+            const addresses = JSON.parse(localStorage.getItem('userAddresses') || '[]');
+            const addressSection = document.getElementById('address-section');
+
+            if (addresses.length === 1) {
+                // One address — auto fill
+                document.getElementById('delivery-address').value = addresses[0];
+
+            } else if (addresses.length > 1) {
+                // Multiple addresses — show dropdown
+                addressSection.innerHTML = `
+                    <label>Delivery Address</label>
+                    <select id="address-select" onchange="handleAddressSelect(this.value)"
+                        style="width:100%; padding:0.875rem 1rem; border:2px solid var(--border); border-radius:10px; font-size:0.95rem; font-family:inherit; background:#fafafa; margin-bottom:0.75rem;">
+                        <option value="">-- Select a saved address --</option>
+                        ${addresses.map((addr, i) => `
+                            <option value="${addr}">${i === 0 ? 'Default: ' : ''}${addr}</option>
+                        `).join('')}
+                        <option value="new">+ Type a new address</option>
+                    </select>
+                    <textarea id="delivery-address" rows="3"
+                        placeholder="House number, street, area, city..."
+                        style="display:none; width:100%; padding:0.875rem 1rem; border:2px solid var(--border); border-radius:10px; font-size:0.95rem; font-family:inherit; background:#fafafa;"></textarea>
+                `;
+
+                // Auto select default address
+                const select = document.getElementById('address-select');
+                select.value = addresses[0];
+                document.getElementById('delivery-address').value = addresses[0];
             }
 
             // Show order items
@@ -454,6 +481,21 @@
             document.getElementById('total-display').textContent = `₦${total.toLocaleString()}`;
         });
 
+        function handleAddressSelect(value) {
+            const textarea = document.getElementById('delivery-address');
+            if (value === 'new') {
+                textarea.style.display = 'block';
+                textarea.value = '';
+                textarea.focus();
+            } else if (value) {
+                textarea.style.display = 'none';
+                textarea.value = value;
+            } else {
+                textarea.style.display = 'none';
+                textarea.value = '';
+            }
+        }
+
         function selectPayment(el, value) {
             document.querySelectorAll('.payment-option').forEach(opt => opt.classList.remove('selected'));
             el.classList.add('selected');
@@ -464,12 +506,19 @@
             const name = document.getElementById('delivery-name').value.trim();
             const phone = document.getElementById('delivery-phone').value.trim();
             const email = document.getElementById('delivery-email').value.trim();
-            const address = document.getElementById('delivery-address').value.trim();
             const notes = document.getElementById('delivery-notes').value.trim();
             const payment = document.querySelector('input[name="payment"]:checked').value;
 
+            // Get address from select or textarea
+            const select = document.getElementById('address-select');
+            const address = select
+                ? (select.value === 'new' || select.value === ''
+                    ? document.getElementById('delivery-address').value.trim()
+                    : select.value)
+                : document.getElementById('delivery-address').value.trim();
+
             if (!name || !phone || !email || !address) {
-                alert('⚠️ Please fill in all required delivery details.');
+                alert('Please fill in all required delivery details.');
                 return;
             }
 
@@ -500,22 +549,12 @@
             message += `📍 *Delivery Address*\n${address}\n`;
             if (notes) message += `\n📝 Notes: ${notes}`;
 
-            // Save order to localStorage
-            const order = { id: orderId, items, total, delivery: { name, phone, email, address }, payment, status: 'Pending', date: new Date().toISOString() };
-            const orders = JSON.parse(localStorage.getItem('orders') || '[]');
-            orders.push(order);
-            localStorage.setItem('orders', JSON.stringify(orders));
-
-            // Clear cart
-            cart.clear();
-
-            // Open WhatsApp
-            const encoded = encodeURIComponent(message);
-            window.open(`${WHATSAPP_LINK}?text=${encoded}`, '_blank');
-
-            // Redirect home
-            setTimeout(() => { window.location.href = '../index.html'; }, 1000);
-        }
-    </script>
-</body>
-</html>
+            // Save order
+            const order = {
+                id: orderId,
+                user: auth.currentUser.id,
+                items, total,
+                delivery: { name, phone, email, address },
+                payment,
+                status: 'Pending',
+                date: new Date().toISOStr
