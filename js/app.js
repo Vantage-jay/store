@@ -154,7 +154,7 @@ function renderProducts(productsToShow = null) {
             : '';
         
         return `
-        <div class="product-card ${isOutOfStock ? 'out-of-stock-card' : ''}" onclick="viewProduct(${product.id})">
+        <div class="product-card ${isOutOfStock ? 'out-of-stock-card' : ''}">
             <div class="product-image">
                 <img src="${product.image}" alt="${product.name}" loading="lazy" onerror="this.src='https://via.placeholder.com/300x220?text=${encodeURIComponent(product.name)}'">
                 ${badgeHTML}
