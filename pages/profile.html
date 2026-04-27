@@ -541,16 +541,16 @@
             }
 
             list.innerHTML = addresses.map((addr, i) => `
-                <div class="address-card">
-                    <div>
-                        <p>${addr}</p>
-                        ${i === 0 ? '<span class="default-tag">Default</span>' : ''}
-                    </div>
-                    <button class="delete-addr" onclick="deleteAddress(${i})" title="Remove">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </div>
-            `).join('');
+    <div class="address-card">
+        <div style="flex:1;">
+            <p>${addr}</p>
+            ${i === 0 ? '<span class="default-tag">Default</span>' : `<button onclick="setDefault(${i})" style="margin-top:0.4rem; background:none; border:1px solid var(--primary); color:var(--primary); border-radius:50px; padding:0.2rem 0.75rem; font-size:0.75rem; cursor:pointer; font-weight:600;">Set as Default</button>`}
+        </div>
+        <button class="delete-addr" onclick="deleteAddress(${i})" title="Remove">
+            <i class="fas fa-trash"></i>
+        </button>
+    </div>
+`).join('');
         }
 
         function saveAddress() {
@@ -571,6 +571,13 @@
         }
 
         function deleteAddress(index) {
+            function setDefault(index) {
+    const addresses = JSON.parse(localStorage.getItem('userAddresses') || '[]');
+    const selected = addresses.splice(index, 1)[0];
+    addresses.unshift(selected);
+    localStorage.setItem('userAddresses', JSON.stringify(addresses));
+    renderAddresses();
+                                         }
             const addresses = JSON.parse(localStorage.getItem('userAddresses') || '[]');
             addresses.splice(index, 1);
             localStorage.setItem('userAddresses', JSON.stringify(addresses));
