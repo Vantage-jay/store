@@ -819,8 +819,9 @@ body {
     font-weight: 500;
 }
 
-.mobile-link span:first-child {
+.mobile-link i {
     font-size: 1.25rem;
+}
 }
 
 .mobile-link.active {
