@@ -829,7 +829,7 @@ body {
 }
 
 /* ===== RESPONSIVE ===== */
-@media (max-width: 768px) {
+@media (max-width: 480px) {
     .nav-center {
         display: none;
     }
@@ -867,7 +867,7 @@ body {
     }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 769px) {
     .mobile-nav {
         display: none;
     }
@@ -875,7 +875,7 @@ body {
     body {
         padding-bottom: 0;
     }
-    }
+        }
 /* ===== TABLET (768px - 1024px) ===== */
 @media (min-width: 768px) and (max-width: 1024px) {
     .nav-center { display: flex; gap: 1rem; }
