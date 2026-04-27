@@ -98,7 +98,7 @@ const productDB = {
                 name: "Okro",
                 price: 700,
                 category: "Vegetables",
-                image: "https://images.unsplash.com/photo-1615484477778-ca3b77940c25?w=400",
+                image: "https://images.unsplash.com/photo-1627842068538-fc0d43bbd471?w=400",
                 description: "Fresh, tender okro perfect for soups and stews. A Nigerian kitchen essential.",
                 stock: 0,
                 unit: "kg",
