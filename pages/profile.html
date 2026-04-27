@@ -571,22 +571,23 @@
         }
 
         function deleteAddress(index) {
-            function setDefault(index) {
+    const addresses = JSON.parse(localStorage.getItem('userAddresses') || '[]');
+    addresses.splice(index, 1);
+    localStorage.setItem('userAddresses', JSON.stringify(addresses));
+    renderAddresses();
+}
+
+function setDefault(index) {
     const addresses = JSON.parse(localStorage.getItem('userAddresses') || '[]');
     const selected = addresses.splice(index, 1)[0];
     addresses.unshift(selected);
     localStorage.setItem('userAddresses', JSON.stringify(addresses));
     renderAddresses();
-                                         }
-            const addresses = JSON.parse(localStorage.getItem('userAddresses') || '[]');
-            addresses.splice(index, 1);
-            localStorage.setItem('userAddresses', JSON.stringify(addresses));
-            renderAddresses();
-        }
+}
 
-        document.addEventListener('DOMContentLoaded', () => {
-            loadProfile();
-        });
+document.addEventListener('DOMContentLoaded', () => {
+    loadProfile();
+});
     </script>
 </body>
 </html>
